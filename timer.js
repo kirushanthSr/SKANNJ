@@ -81,15 +81,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 const result = await response.json();
                 
                 if (result.success) {
-                    showSuccessModal();
-                    notificationForm.reset();
+                    alert('Thank you for subscribing! You will be notified when we launch.');
+                    window.location.href = "index.html";
                 } else {
                     throw new Error(result.message || 'Failed to subscribe');
                 }
             } catch (error) {
                 console.error('Error:', error);
                 alert('Failed to subscribe. Please try again later.');
-            } finally {
                 submitButton.disabled = false;
                 submitButton.textContent = 'Notify Me';
             }
@@ -99,32 +98,6 @@ document.addEventListener("DOMContentLoaded", function() {
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
-    }
-
-    function showSuccessModal() {
-        const modal = document.getElementById("successModal");
-        if (modal) {
-            modal.style.display = "block";
-
-            const closeButton = modal.querySelector(".close");
-            const goToHomePageButton = modal.querySelector("#goToHomePage");
-
-            closeButton.onclick = function() {
-                modal.style.display = "none";
-                window.location.href = "index.html";
-            }
-
-            goToHomePageButton.onclick = function() {
-                window.location.href = "index.html";
-            }
-
-            window.onclick = function(event) {
-                if (event.target === modal) {
-                    modal.style.display = "none";
-                    window.location.href = "index.html";
-                }
-            }
-        }
     }
 
     // Mobile Menu Toggle
