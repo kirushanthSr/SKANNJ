@@ -1,87 +1,159 @@
-// In index.js
-// Initialize AOS
-AOS.init({
-    duration: 1000,
-    once: true,
-    easing: 'ease-in-out'
-});
-
-// Set launch date to exactly 4 months from now
-const launchDate = new Date();
-launchDate.setMonth(launchDate.getMonth() + 4);
-
-// Fixed timer function
-function updateTimer() {
-    const currentDate = new Date();
-    const diff = launchDate - currentDate;
-
-    if (diff <= 0) {
-        document.getElementById('days').innerHTML = '00';
-        document.getElementById('hours').innerHTML = '00';
-        document.getElementById('minutes').innerHTML = '00';
-        document.getElementById('seconds').innerHTML = '00';
-        return;
-    }
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-    document.getElementById('days').textContent = days.toString().padStart(2, '0');
-    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-}
-
-// Update timer immediately and then every second
-updateTimer();
-setInterval(updateTimer, 1000);
-
-// Back to Top Button
-document.getElementById('backToTop').addEventListener('click', () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
+document.addEventListener("DOMContentLoaded", function() {
+    // Initialize AOS
+    AOS.init({
+        duration: 800,
+        easing: "ease-in-out",
+        once: true,
+        mirror: false
     });
-});
 
-// CORRECTED JAVASCRIPT
-// Remove debounce unless you have specific performance needs
-const backToTop = document.querySelector('.back-to-top');
+    // Countdown Timer Logic
+    const countDownDate = new Date("June 1, 2025 00:00:00").getTime();
 
-// Simple scroll handler
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 300) {
-        backToTop.classList.add('visible');
-    } else {
-        backToTop.classList.remove('visible');
-    }
-});
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = countDownDate - now;
 
-// Reliable click handler
-backToTop.addEventListener('click', (e) => {
-    e.preventDefault();
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-    
-    // Fallback for older browsers
-    if (!('scrollBehavior' in document.documentElement.style)) {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        if (scrollTop > 0) {
-            window.requestAnimationFrame(smoothScroll);
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("days").textContent = String(days).padStart(2, '0');
+        document.getElementById("hours").textContent = String(hours).padStart(2, '0');
+        document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
+        document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
+
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("days").textContent = "00";
+            document.getElementById("hours").textContent = "00";
+            document.getElementById("minutes").textContent = "00";
+            document.getElementById("seconds").textContent = "00";
         }
     }
-});
 
-// Fallback smooth scroll
-function smoothScroll() {
-    const currentPosition = window.pageYOffset || document.documentElement.scrollTop;
-    if (currentPosition > 0) {
-        window.scrollTo(0, Math.max(currentPosition - 50, 0));
-        requestAnimationFrame(smoothScroll);
+    updateCountdown();
+    const x = setInterval(updateCountdown, 1000);
+
+    // Notification Form Submission
+    const notificationForm = document.getElementById("notificationForm");
+    if (notificationForm) {
+        notificationForm.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const emailInput = document.getElementById("email");
+            const submitButton = this.querySelector('button[type="submit"]');
+            const email = emailInput.value.trim();
+
+            if (!email) {
+                alert("Please enter your email address.");
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.textContent = "Sending...";
+
+            try {
+                const formData = {
+                    access_key: '31a87a1b-abc3-45e3-b66b-ec5e149820eb',
+                    email: email,
+                    subject: 'Launch Notification Request',
+                    message: `New launch notification request from: ${email}`,
+                    from_name: 'Launch Subscriber',
+                    replyto: email
+                };
+
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    showSuccessModal();
+                    notificationForm.reset();
+                } else {
+                    throw new Error(result.message || 'Failed to subscribe');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to subscribe. Please try again later.');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Notify Me';
+            }
+        });
     }
-}
 
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    function showSuccessModal() {
+        const modal = document.getElementById("successModal");
+        if (modal) {
+            modal.style.display = "block";
+
+            const closeButton = modal.querySelector(".close");
+            const goToHomePageButton = modal.querySelector("#goToHomePage");
+
+            closeButton.onclick = function() {
+                modal.style.display = "none";
+                window.location.href = "index.html";
+            }
+
+            goToHomePageButton.onclick = function() {
+                window.location.href = "index.html";
+            }
+
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                    window.location.href = "index.html";
+                }
+            }
+        }
+    }
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    }
+
+    // Back to Top Button
+    const backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+});
