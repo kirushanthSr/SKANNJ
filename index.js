@@ -6,61 +6,142 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Mobile Menu Toggle
-    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
+    
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    }
 
-    menuBtn?.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
+    // Statistics Animation
+    const stats = document.querySelectorAll('.stat-number');
+    
+    stats.forEach(stat => {
+        const target = parseInt(stat.getAttribute('data-target'));
+        const increment = target / 200;
+        
+        function updateCount() {
+            const count = parseInt(stat.innerText);
+            if (count < target) {
+                stat.innerText = Math.ceil(count + increment);
+                setTimeout(updateCount, 10);
+            } else {
+                stat.innerText = target;
+            }
+        }
+        
+        // Start counting when element is in view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    updateCount();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        
+        observer.observe(stat);
     });
+
+    // Newsletter Form Submission
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const emailInput = this.querySelector('input[type="email"]');
+            const submitButton = this.querySelector('button[type="submit"]');
+            const email = emailInput.value.trim();
+
+            if (!email) {
+                alert('Please enter your email address.');
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.textContent = 'Subscribing...';
+
+            try {
+                const formData = {
+                    access_key: '31a87a1b-abc3-45e3-b66b-ec5e149820eb',
+                    email: email,
+                    subject: 'New Newsletter Subscription',
+                    message: `New subscription request from: ${email}`,
+                    from_name: 'Newsletter Subscriber',
+                    replyto: email
+                };
+
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Thank you for subscribing to our newsletter!');
+                    newsletterForm.reset();
+                } else {
+                    throw new Error(result.message || 'Failed to subscribe');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to subscribe. Please try again later.');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Subscribe';
+            }
+        });
+    }
+
+    // Back to Top Button
+    const backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
 
     // Back to Top Button Logic
-    const backToTop = document.querySelector('.back-to-top');
+    const backToTopBtn = document.getElementById("backToTop");
 
-    window.addEventListener('scroll', debounce(() => {
+    if (!backToTopBtn) {
+        console.error("Back to Top button not found!");
+        return;
+    }
+
+    window.addEventListener("scroll", function () {
         if (window.scrollY > 300) {
-            backToTop?.classList.add('visible');
+            backToTopBtn.classList.add("visible");
         } else {
-            backToTop?.classList.remove('visible');
+            backToTopBtn.classList.remove("visible");
         }
-    }, 100));
-
-    backToTop?.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
     });
 
-    // Statistics Counter Animation
-    const stats = document.querySelectorAll('.stat-number');
-
-    const animateCounter = (el) => {
-        const target = parseInt(el.getAttribute('data-target'));
-        let count = 0;
-        const speed = Math.max(10, target / 100); // Dynamic speed adjustment
-
-        const updateCounter = () => {
-            if (count < target) {
-                count += speed;
-                el.textContent = Math.floor(count);
-                requestAnimationFrame(updateCounter);
-            } else {
-                el.textContent = target;
-            }
-        };
-        updateCounter();
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateCounter(entry.target);
-                observer.unobserve(entry.target);
-            }
+    backToTopBtn.addEventListener("click", function () {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
         });
-    }, { threshold: 0.5 });
-
-    stats.forEach(stat => observer.observe(stat));
+    });
 
     // Smooth Scroll for Navigation Links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -152,30 +233,5 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             header.classList.remove("scrolled");
         }
-    });
-
-
-
-    // Back to Top Button Logic (for additional setup)
-    const backToTopBtn = document.getElementById("backToTop");
-
-    if (!backToTopBtn) {
-        console.error("Back to Top button not found!");
-        return;
-    }
-
-    window.addEventListener("scroll", function () {
-        if (window.scrollY > 300) {
-            backToTopBtn.classList.add("visible");
-        } else {
-            backToTopBtn.classList.remove("visible");
-        }
-    });
-
-    backToTopBtn.addEventListener("click", function () {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
     });
 });
