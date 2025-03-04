@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const result = await response.json();
                 
                 if (result.success) {
-                    alert('Thank you for subscribing to our newsletter!');
+                    showSuccessModal();
                     newsletterForm.reset();
                 } else {
                     throw new Error(result.message || 'Failed to subscribe');
@@ -98,6 +98,33 @@ document.addEventListener("DOMContentLoaded", function () {
                 submitButton.textContent = 'Subscribe';
             }
         });
+    }
+
+    // Success Modal Functions
+    function showSuccessModal() {
+        const modal = document.getElementById("successModal");
+        if (modal) {
+            modal.style.display = "block";
+
+            const closeButton = modal.querySelector(".close");
+            const goToHomePageButton = modal.querySelector("#goToHomePage");
+
+            closeButton.onclick = function() {
+                modal.style.display = "none";
+                window.location.href = "index.html";
+            }
+
+            goToHomePageButton.onclick = function() {
+                window.location.href = "index.html";
+            }
+
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                    window.location.href = "index.html";
+                }
+            }
+        }
     }
 
     // Back to Top Button

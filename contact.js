@@ -86,21 +86,24 @@ document.addEventListener("DOMContentLoaded", function () {
         if (modal) {
             modal.style.display = "block";
 
-            const closeButton = document.querySelector(".close");
-            closeButton.onclick = function () {
+            const closeButton = modal.querySelector(".close");
+            const goToHomePageButton = modal.querySelector("#goToHomePage");
+
+            closeButton.onclick = function() {
                 modal.style.display = "none";
-            };
-
-            const goToHomePageButton = document.getElementById("goToHomePage");
-            goToHomePageButton.onclick = function () {
                 window.location.href = "index.html";
-            };
+            }
 
-            window.onclick = function (event) {
+            goToHomePageButton.onclick = function() {
+                window.location.href = "index.html";
+            }
+
+            window.onclick = function(event) {
                 if (event.target === modal) {
                     modal.style.display = "none";
+                    window.location.href = "index.html";
                 }
-            };
+            }
         }
     }
 
