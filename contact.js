@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 500);
     }
 
-    // Initialize AOS (Animate On Scroll)
+    // Initialize AOS
     AOS.init({
         duration: 800,
         easing: "ease-in-out",
@@ -79,39 +79,36 @@ document.addEventListener("DOMContentLoaded", function () {
             submitButton.disabled = true;
             submitButton.textContent = "Sending...";
 
-            // Send form data using Formspree
-            fetch("https://formspree.io/f/YOUR_FORM_ID", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    name,
-                    email,
-                    phone,
-                    subject,
-                    message,
-                    _replyto: email
-                })
+            // Send form data using Web3Forms
+            const formData = new FormData();
+            formData.append('access_key', '31a87a1b-abc3-45e3-b66b-ec5e149820eb');
+            formData.append('name', name);
+            formData.append('email', email);
+            formData.append('phone', phone);
+            formData.append('subject', subject);
+            formData.append('message', message);
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
             })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Network response was not ok.');
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log("✅ Message sent successfully!");
-                contactForm.reset();
-                submitButton.disabled = false;
-                submitButton.textContent = "Send Message";
-                showSuccessModal();
+                if (data.success) {
+                    console.log("✅ Message sent successfully!");
+                    contactForm.reset();
+                    showSuccessModal();
+                } else {
+                    throw new Error(data.message || 'Something went wrong!');
+                }
             })
             .catch(error => {
-                console.error("❌ Error sending message:", error);
+                console.error("❌ Error:", error);
+                alert("Failed to send message. Please try again later.");
+            })
+            .finally(() => {
                 submitButton.disabled = false;
                 submitButton.textContent = "Send Message";
-                alert("Failed to send message. Please try again later.");
             });
         });
     }
