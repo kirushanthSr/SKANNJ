@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SKANNJ Smart Bin Launch Countdown - Be the first to experience the future of waste management">
+    <title>Launch Countdown - SKANNJ Smart Bin</title>
+    <link rel="stylesheet" href="timer.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container header-container">
+            <div class="logo">
+                <a href = "index.html"><img src="images/logo1.png" alt="SKANNJ Smart Bin Logo"></a>
+            </div>
+            <nav class="nav-menu">
+                <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="timer.html" class="active launch-btn">Launch</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Countdown Hero Section -->
+    <section class="countdown-hero">
+        <div class="container" style="margin-top:100px;">
+            <div class="countdown-content" data-aos="fade-up" data-aos-delay="200">
+                <h1>The Future of Waste Management is Almost Here</h1>
+                <p data-aos="fade-up" data-aos-delay="300">Be among the first to experience SKANNJ Smart Bin's revolutionary AI-powered waste management system.</p>
+                
+                <div class="countdown-timer">
+                    <div class="timer-box" data-aos="zoom-in" data-aos-delay="400">
+                        <span id="days">00</span>
+                        <label>Days</label>
+                    </div>
+                    <div class="timer-box" data-aos="zoom-in" data-aos-delay="500">
+                        <span id="hours">00</span>
+                        <label>Hours</label>
+                    </div>
+                    <div class="timer-box" data-aos="zoom-in" data-aos-delay="600">
+                        <span id="minutes">00</span>
+                        <label>Minutes</label>
+                    </div>
+                    <div class="timer-box" data-aos="zoom-in" data-aos-delay="700">
+                        <span id="seconds">00</span>
+                        <label>Seconds</label>
+                    </div>
+                </div>
+
+                <div class="notification-signup">
+                    <h2>Get Notified When We Launch</h2>
+                    <p>Subscribe to our newsletter and be the first to know when SKANNJ Smart Bin goes live.</p>
+                    <form id="notificationForm" class="signup-form">
+                        <div class="form-group">
+                            <input type="email" id="email" placeholder="Enter your email address" required>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 17px;">Notify Me</button>
+                        </div>
+                        <p class="form-note">By subscribing, you agree to receive updates from SKANNJ Smart Bin.</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Preview Section -->
+    <section class="features-preview">
+        <div class="container" style="margin-top: 30px;">
+            <h2 data-aos="fade-up">What to Expect</h2>
+            <div class="preview-grid">
+                <div class="preview-card" data-aos="fade-up" data-aos-delay="200">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Mobile App</h3>
+                    <p>Control and monitor your waste management from anywhere with our intuitive mobile application.</p>
+                </div>
+                <div class="preview-card" data-aos="fade-up" data-aos-delay="300">
+                    <i class="fas fa-brain"></i>
+                    <h3>AI Technology</h3>
+                    <p>Experience state-of-the-art waste recognition and sorting powered by artificial intelligence.</p>
+                </div>
+                <div class="preview-card" data-aos="fade-up" data-aos-delay="400">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Analytics</h3>
+                    <p>Get detailed insights into your waste management patterns and environmental impact.</p>
+                </div>
+                <div class="preview-card" data-aos="fade-up" data-aos-delay="500">
+                    <i class="fas fa-gift"></i>
+                    <h3>Rewards</h3>
+                    <p>Earn points and rewards for your contribution to sustainable waste management.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Early Access Section -->
+    <section class="early-access">
+        <div class="container">
+            <div class="access-content" data-aos="fade-up" data-aos-delay="600">
+                <h2>Want Early Access?</h2>
+                <p>Join our beta testing program and experience SKANNJ Smart Bin before the official launch.</p>
+                <a href="contact.html" class="btn btn-secondary" style="margin-bottom: 15px;">Contact Us for Beta Access</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>About SKANNJ</h4>
+                    <p>Revolutionizing waste management through smart technology and sustainable solutions. Together, let's create a cleaner and greener future.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="https://web.facebook.com/profile.php?id=61573085744109" target="_blank" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@TeamSKANNJ" target="_blank" aria-label="Youtube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="https://www.instagram.com/skannj_/" target="_blank" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/groups/13116942" target="_blank" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-envelope"></i>  teamskannj@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> (+94) 764202229</p>
+                    <p><i class="fas fa-location-dot"></i> 435 Galle Rd, Colombo 003</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 SKANNJ Smart Bin. All rights reserved. Designed by Selvaratnam Kirushanth</p>
+            </div>
+        </div>
+    </footer>
+
+<!-- Back to Top Button -->
+<button id="backToTop" class="back-to-top" aria-label="Back to Top">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="timer.js"></script>
+</body>
+</html>
