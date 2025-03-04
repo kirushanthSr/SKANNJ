@@ -79,30 +79,36 @@ document.addEventListener("DOMContentLoaded", function () {
             submitButton.disabled = true;
             submitButton.textContent = "Sending...";
 
-            // Send to our backend server
-            fetch('http://localhost:3001/send-email', {
-                method: 'POST',
+            // Send form data using Formspree
+            fetch("https://formspree.io/f/YOUR_FORM_ID", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     name,
                     email,
                     phone,
                     subject,
-                    message
+                    message,
+                    _replyto: email
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok.');
+            })
             .then(data => {
-                console.log("✅ Email sent successfully!", data);
+                console.log("✅ Message sent successfully!");
                 contactForm.reset();
                 submitButton.disabled = false;
                 submitButton.textContent = "Send Message";
                 showSuccessModal();
             })
             .catch(error => {
-                console.error("❌ Error sending email:", error);
+                console.error("❌ Error sending message:", error);
                 submitButton.disabled = false;
                 submitButton.textContent = "Send Message";
                 alert("Failed to send message. Please try again later.");
@@ -135,8 +141,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     modal.style.display = "none";
                 }
             };
-        } else {
-            console.error("❌ Success modal not found in DOM.");
         }
     }
 
